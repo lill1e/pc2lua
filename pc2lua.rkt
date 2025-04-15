@@ -177,11 +177,6 @@
      "end"
      (if (eqv? function 'main) "\n\nmain()" ""))))
 
-(define parse-union-case
-  (λ (cases level)
-    (match cases
-      [`(union-case ,register ,_ . ,cases) (parse-cases (safe register) cases level)])))
-
 ; parse-cases : Symbol Symbol List-of-Symbol : List-of-String
 (define parse-cases
   (λ (register cases level)
