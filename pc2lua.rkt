@@ -161,8 +161,7 @@
                         (match binding
                           [`(,formal ,expression)
                            (value-append (if expression? "" (tabs level)) "local " (safe formal) " = " (parse-expression expression level #t))])) bindings) "\n") "\n" (parse-expression e level #f) "\n"))
-      [`(,func . ,args) (value-append (safe func) "(" (string-join (map (λ (expression) (parse-expression expression level #t)) args) ", ") ")")]
-      )))
+      [`(,func . ,args) (value-append (safe func) "(" (string-join (map (λ (expression) (parse-expression expression level #t)) args) ", ") ")")])))
 
 ; parse-function : Symbol List-of-Symbol -> String
 (define parse-function
@@ -225,9 +224,7 @@
               [`(define-program-counter ,pc-reg) (let [(pc (safe pc-reg))]
                                                    (set! program-counter pc)
                                                    (cons (value-append "local " pc " = nil") (parse-header (cdr lines))))]
-              [_ (parse-header (cdr lines))]
-
-              )])))
+              [_ (parse-header (cdr lines))])])))
 
 ; parse-body : List-of-Symbol -> List-of-String
 (define parse-body
@@ -238,8 +235,7 @@
        (match (car lines)
          [`(define-union ,name . ,cases) (cons (string-join (union-defs name cases) "\n\n") (parse-body (cdr lines)))]
          [`(define-label ,name . ,function-lines) (cons (parse-function name function-lines) (parse-body (cdr lines)))]
-         [_ (parse-body (cdr lines))]
-         )])))
+         [_ (parse-body (cdr lines))])])))
 
 ; pc->lua : List-of-Symbol -> String
 (define pc->lua
