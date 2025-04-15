@@ -94,6 +94,7 @@
       [(and (char=? #\~ (car s)) (or (char=? #\s (cadr s)) (char=? #\a (cadr s)))) (cons #\% (cons #\d (convert-format (cddr s))))]
       [else (cons (car s) (convert-format (cdr s)))])))
 
+; parse-conditionals : List-of-Symbol Number Boolean Boolean -> String
 (define parse-conditionals
   (lambda (exp level after-first? last?)
     (cond [(null? exp) ""]
@@ -112,7 +113,7 @@
                                                (if last? (tabs level) "") (if last? "end" "")
                                                (parse-conditionals rest level #t (if (not (null? rest)) (null? (cdr rest)) #f)))])])))
 
-; parse-expressions : List-of-Symbol -> List-of-String
+; parse-expressions : List-of-Symbol -> String
 (define parse-expression
   (λ (expression level expression?)
     (match expression
@@ -210,7 +211,7 @@
                   ) (parse-cases register (cdr cases) level))])])
     ))
 
-
+; parse-header : List-of-Symbol -> List-of-String
 (define parse-header
   (λ (lines)
     (cond
@@ -234,6 +235,7 @@
 
               )])))
 
+; parse-body : List-of-Symbol -> List-of-String
 (define parse-body
   (λ (lines)
     (cond
@@ -245,6 +247,7 @@
          [_ (parse-body (cdr lines))]
          )])))
 
+; pc->lua : List-of-Symbol -> String
 (define pc->lua
   (λ (lines)
     (value-append (string-join (parse-header lines) "\n\n") "\n" (string-join (parse-body lines) "\n\n"))))
