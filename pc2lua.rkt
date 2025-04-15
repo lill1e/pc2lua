@@ -73,16 +73,15 @@
   (λ (name cases)
     (match cases
       ['() '()]
-      [`((,case-name . ,parameters) . ,rest) (cons (let [(fname (safe (value-append name "_" case-name)))]
-                                                     (let [(parameters (map safe (map symbol->string parameters)))]
-                                                       (value-append "function "
-                                                                     fname
-                                                                     "(" (string-join parameters ", ") ")\n"
-                                                                     (tabs 1) "return {\n"
-                                                                     (tabs 2) "tag = \"" (safe case-name) "\",\n"
-                                                                     (tabs 2) "values = {" (string-join parameters  ", ") "}\n"
-                                                                     (tabs 1) "}\n"
-                                                                     "end"))) (union-defs name rest))])))
+      [`((,case-name . ,parameters) . ,rest) (cons (let [(fname (safe (value-append name "_" case-name))) (parameters (map safe (map symbol->string parameters)))]
+                                                     (value-append "function "
+                                                                   fname
+                                                                   "(" (string-join parameters ", ") ")\n"
+                                                                   (tabs 1) "return {\n"
+                                                                   (tabs 2) "tag = \"" (safe case-name) "\",\n"
+                                                                   (tabs 2) "values = {" (string-join parameters  ", ") "}\n"
+                                                                   (tabs 1) "}\n"
+                                                                   "end")) (union-defs name rest))])))
 
 ; convert-format : List-of-Character -> List-of-Character
 (define convert-format
