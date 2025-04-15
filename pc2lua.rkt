@@ -151,12 +151,6 @@
                                                   (parse-expression alternative (add1 level) #f) "\n"
                                                   "end")]
       [`(cond . ,_) (parse-conditionals expression level #f #f)]
-      ;; [`(cond . ,conditions)
-      ;;  (let loop [(conditions conditions)]
-      ;;    (cond
-      ;;      [(null? conditions) (value-append (tabs level) "end")]
-      ;;      [else (cons (match ) (loop (cdr conditions))
-      ;;                  ]))]
       [`(begin . ,expressions) (string-join (map (λ (expression) (parse-expression expression level #f)) expressions) "\n")]
       [`(set! ,formal ,value) (value-append (if expression? "" (tabs level)) (safe formal) " = " (parse-expression value level #t))]
       [`(union-case ,reg ,_ . ,cases) (string-join (parse-cases (safe reg) cases level) "\n")]
@@ -214,34 +208,8 @@
                                   ,(value-append (tabs (add1 level)) "return")
                                   ,(value-append (tabs level) "end"))) "\n")
                   ) (parse-cases register (cdr cases) level))])])
-    #|(match cases
-      [`(union-case ,register ,name . ,cases)
-       (let loop [(case cases) (n 0)]
-         (cond
-           [(null? case) ""]
-           [else (match case
-                   [`(,tag . ,_) (value-append
-                                  "if " ".tag == " (safe tag) " then\n"
-                                  (let loop [(n 0)])
-                                  "" (loop (cdr case) (add1 n)))])]))])|#
     ))
 
-;; (display (parse-union-case
-;;           '(union-case
-;;             *m* ll
-;;             [(link v rest)
-;;              (begin
-;;                (set! *m* rest)
-;;                (set! *pc* process))]
-;;             [(empty)
-;;              (begin
-;;                (set! *pc* process-k))]) 1))
-
-;; (let loop [(values '(v rest)) (n 1)]
-;;   (cond
-;;     [(null? values) '()]
-;;     [else (cons (value-append "local " (safe (car values)) " = " "namehere.values[" n "]") (loop (cdr values) (add1 n)))]
-;;     ))
 
 (define parse-header
   (λ (lines)
@@ -271,7 +239,6 @@
     (cond
       [(null? lines) '()]
       [else
-       ;; (display (car lines))
        (match (car lines)
          [`(define-union ,name . ,cases) (cons (string-join (union-defs name cases) "\n\n") (parse-body (cdr lines)))]
          [`(define-label ,name . ,function-lines) (cons (parse-function name function-lines) (parse-body (cdr lines)))]
