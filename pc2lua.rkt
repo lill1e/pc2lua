@@ -240,3 +240,21 @@
 (define pc->lua
   (λ (lines)
     (value-append (string-join (parse-header lines) "\n\n") "\n" (string-join (parse-body lines) "\n\n"))))
+
+(define pc2lua
+  (λ (file-name)
+    (let* [(file-name* (string-split file-name "."))
+           (file-name-prefix (car file-name*))
+           (output-file-name (string-append file-name-prefix ".lua"))]
+      (when (file-exists? (string-append file-name-prefix ".lua"))
+        (begin
+          (let [(time (number->string (current-seconds)))]
+            (set! output-file-name (string-append time ".lua"))
+            (printf "Warning: The output file has been named ~a.lua due to naming conflicts.\n" time))))
+      (let [(lines (file->list file-name)) (lua-file (open-output-file output-file-name))]
+        (begin
+          (display (pc->lua lines) lua-file)
+          (close-output-port lua-file))
+        ))))
+
+(provide pc2lua)
