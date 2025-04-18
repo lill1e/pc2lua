@@ -200,9 +200,8 @@
                                                 (loop (cdr values) (add1 n)))])) "\n"))
                                   ,(parse-expression expression (add1 level) #f)
                                   ,(value-append (tabs (add1 level)) "return")
-                                  ,(value-append (tabs level) "end"))) "\n")
-                  ) (parse-cases register (cdr cases) level))])])
-    ))
+                                  ,(value-append (tabs level) "end"))) "\n"))
+                (parse-cases register (cdr cases) level))])])))
 
 ; parse-header : List-of-Symbol -> List-of-String
 (define parse-header
