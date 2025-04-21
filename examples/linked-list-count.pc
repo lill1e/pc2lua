@@ -1,0 +1,34 @@
+(define-registers *m* *e* *o* *w*)
+(define-program-counter *pc*)
+
+(define-union ll
+  (empty)
+  (link v rest))
+
+(define-union kt
+  (empty dismount))
+
+(define-label process
+  (union-case
+   *m* ll
+   [(link _ rest)
+    (begin
+      (set! *m* rest)
+      (set! *o* (add1 *o*))
+      (set! *pc* process))]
+   [(empty)
+    (begin
+      (set! *pc* process-k))]))
+
+(define-label process-k
+  (union-case
+   *e* kt
+   [(empty dismount) (dismount-trampoline dismount)]))
+
+(define-label main
+  (begin
+    (set! *m* (ll_link 1 (ll_link 2 (ll_link 3 (ll_empty)))))
+    (set! *pc* process)
+    (set! *o* 0)
+    (mount-trampoline kt_empty *e* *pc*)
+    (printf "~s\n" *o*)))

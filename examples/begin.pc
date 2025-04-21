@@ -1,0 +1,25 @@
+(define-registers *m* *e* *o* *w*)
+(define-program-counter *pc*)
+
+(define-union ll
+    (empty)
+    (link v rest))
+
+(define-union kt
+  (empty dismount))
+
+(define-label process 
+    (begin
+        (set! *o* (* 2 *w*))
+        (set! *w* (sub1 *o*))
+        (dismount-trampoline *e*)))
+
+(define-label main
+    (begin
+        (set! *o* 5)
+        (set! *w* (add1 *o*))
+        (set! *pc* process)
+        (mount-trampoline kt_empty *e* *pc*)
+        (printf "~a\n" *w*)
+    )
+)
