@@ -1,5 +1,5 @@
 # pc2lua
-A transpiler from [Lua](https://lua.org) to [ParentheC](https://legacy.cs.indiana.edu/classes/b521/newpc/ParentheC.pdf) written in [Racket](https://racket-lang.org)
+A transpiler from [ParentheC](https://legacy.cs.indiana.edu/classes/b521/newpc/ParentheC.pdf) to [Lua](https://lua.org) written in [Racket](https://racket-lang.org)
 ## FAQ
 ### ParentheC, what is that?
 ParentheC is a subset of racket, as noted in the linked paper above. In short, ParentheC is used to provide a mechanical way of translating from a Racket-like language to some other programming language.
